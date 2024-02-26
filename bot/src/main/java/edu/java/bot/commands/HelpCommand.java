@@ -6,7 +6,9 @@ import edu.java.bot.resolver.TextResolver;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.text.StringSubstitutor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HelpCommand extends AbstractCommand {
 
     private final List<Command> commands;

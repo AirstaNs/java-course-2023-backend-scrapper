@@ -10,7 +10,9 @@ import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UntrackCommand extends AbstractCommand {
     private static final String UNTRACK_DATA_PREFIX = "untrack$";
     private final BotService botService;

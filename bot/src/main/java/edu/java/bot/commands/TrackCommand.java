@@ -8,7 +8,9 @@ import edu.java.bot.service.BotService;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TrackCommand extends AbstractCommand {
 
     private final BotService botService;
