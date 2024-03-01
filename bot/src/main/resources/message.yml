@@ -1,0 +1,26 @@
+message:
+  unknown_command: "Команда ```%command%``` не найдена в списке команд.\n Подробнее /help"
+command:
+  help:
+    main: "*Список всех доступных команд:*\n"
+    format: "*%command%* - %description%\n"
+    description: "Описание команд"
+  start:
+    description: "Запуск бота"
+    hello_message: "Привет, %user_name%! \n Введите /help для получения справки"
+  untrack:
+    description: "Перестать отслеживание сервиса `/untrack`"
+    success: "Ссылка удалена из списка отслеживаемых"
+    main: "Выберите ссылку отписки из отслеживаемых"
+    empty: "Нет отслеживаемых ссылок"
+    error: "Ошибка удаления ссылки %request_link%: *%error_message%*"
+  track:
+    description: "Начать отслеживание сервиса `/track url`"
+    invalid_command_usage: "Неверное использование команды"
+    invalid_request: "Неверная ссылка %link%. Должна начинаться с http или https"
+    error: "Ошибка добавления ссылки %request_link%: *%error_message%*"
+    success: "Ссылка `%tracking_link%` успешно добавлена в список отслеживаемых"
+  list:
+    main: "Список отслеживаемых ссылок"
+    empty: "Список отслеживаемых ссылок *пуст*"
+    description: "Список всех отслеживаемых сервисов"
