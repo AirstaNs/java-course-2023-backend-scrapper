@@ -5,7 +5,9 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StartCommand extends AbstractCommand {
 
     private final BotService botService;

@@ -6,7 +6,9 @@ import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ListCommand extends AbstractCommand {
 
     private final BotService botService;
