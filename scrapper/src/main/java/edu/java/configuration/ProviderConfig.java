@@ -1,13 +1,11 @@
 package edu.java.configuration;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Getter
-@Validated
 @ConfigurationProperties(prefix = "provider", ignoreUnknownFields = false)
 public class ProviderConfig {
 
@@ -15,7 +13,9 @@ public class ProviderConfig {
     private final String stackoverflow;
 
     @ConstructorBinding
-    public ProviderConfig(@NotBlank String github, @NotBlank String stackoverflow) {
+    public ProviderConfig(
+        @DefaultValue("https://api.github.com") String github,
+        @DefaultValue("https://api.stackexchange.com/2.3") String stackoverflow) {
         this.github = github;
         this.stackoverflow = stackoverflow;
     }
