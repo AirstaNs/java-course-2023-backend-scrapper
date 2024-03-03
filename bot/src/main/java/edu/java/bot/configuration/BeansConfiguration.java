@@ -9,6 +9,8 @@ import edu.java.bot.commands.TrackCommand;
 import edu.java.bot.commands.UntrackCommand;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
@@ -18,12 +20,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
+@OpenAPIDefinition(info = @Info(title = "Bot API", description = "Bot API", version = "1.0.0"))
 public class BeansConfiguration {
-
-    @Bean
-    public TelegramBot telegramBot(ApplicationConfig config) {
-        return new TelegramBot(config.telegramToken());
-    }
 
     @Bean
     public ResourceBundleMessageSource messageSourceResourceBundle() {
@@ -32,6 +30,11 @@ public class BeansConfiguration {
         yamlPropertiesFactoryBean.setResources(new ClassPathResource("message.yml"));
         messageSourceResourceBundle.setCommonMessages(yamlPropertiesFactoryBean.getObject());
         return messageSourceResourceBundle;
+    }
+
+    @Bean
+    public TelegramBot telegramBot(ApplicationConfig config) {
+        return new TelegramBot(config.telegramToken());
     }
 
     @Bean

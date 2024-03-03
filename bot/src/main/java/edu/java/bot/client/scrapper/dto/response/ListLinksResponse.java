@@ -1,6 +1,5 @@
-package edu.java.bot.model.response;
+package edu.java.bot.client.scrapper.dto.response;
 
-import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import java.util.List;
 
 public record ListLinksResponse(
