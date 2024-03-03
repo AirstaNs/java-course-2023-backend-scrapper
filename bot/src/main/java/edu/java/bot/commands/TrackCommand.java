@@ -64,11 +64,11 @@ public class TrackCommand extends AbstractCommand {
     }
 
     public SendMessage performAction(Long chatId, String link) {
-        LinkResponse response = botService.addLinkToUser(link, chatId);
-        if (!response.success()) {
+        var response = botService.addLinkToUser(link, chatId);
+        if (response.isError()) {
             return new SendMessage(chatId,
                 textResolver.resolve("command.track.error",
-                    Map.of("request_link", link, "error_message", response.errorMessage())
+                    Map.of("request_link", link, "error_message", response.apiErrorResponse().description())
                 )
             );
         }
