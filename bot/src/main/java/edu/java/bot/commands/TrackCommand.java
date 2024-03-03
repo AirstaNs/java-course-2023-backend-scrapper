@@ -2,7 +2,6 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.response.LinkResponse;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
 import java.util.Map;

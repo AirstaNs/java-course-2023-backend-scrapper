@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
-import edu.java.bot.model.Link;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
 import org.springframework.stereotype.Component;

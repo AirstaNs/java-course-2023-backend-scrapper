@@ -1,7 +1,6 @@
 package edu.java.bot.service;
 
 import java.net.URI;
-import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
