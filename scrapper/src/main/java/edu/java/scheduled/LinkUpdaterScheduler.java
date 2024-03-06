@@ -22,7 +22,7 @@ public class LinkUpdaterScheduler {
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
-    @Scheduled(fixedDelayString = "#{scheduler.interval()}")
+    @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
         log.info("Executing update task");
         var owner = "AirstaNs";
