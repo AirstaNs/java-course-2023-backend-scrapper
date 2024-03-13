@@ -20,8 +20,8 @@ public class ScrapperClientConfiguration {
     private String scrapperUrl;
 
     @Bean
-    public ScrapperClient scrapperClient() {
-        WebClient webClient = WebClient.builder()
+    public ScrapperClient scrapperClient(WebClient.Builder webClientBuilder) {
+        WebClient webClient = webClientBuilder
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .baseUrl(scrapperUrl)
