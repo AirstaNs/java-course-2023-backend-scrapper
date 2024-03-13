@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
@@ -21,13 +23,14 @@ public class ScrapperClientConfiguration {
     public ScrapperClient scrapperClient() {
         WebClient webClient = WebClient.builder()
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
-            .defaultHeader("Content-Type", "application/json")
-            .baseUrl(scrapperUrl).build();
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .baseUrl(scrapperUrl)
+            .build();
 
-        HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory
+        var proxy = HttpServiceProxyFactory
             .builderFor(WebClientAdapter.create(webClient))
             .build();
-        return httpServiceProxyFactory.createClient(ScrapperClient.class);
+        return proxy.createClient(ScrapperClient.class);
     }
 
 }

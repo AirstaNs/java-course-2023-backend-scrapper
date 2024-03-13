@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
@@ -38,17 +40,16 @@ public class ClientConfiguration {
     }
 
     @Bean
-    public BotClient botClient() {
-        WebClient webClient = WebClient.builder()
+    public BotClient botClient(WebClient.Builder webClientBuilder) {
+        WebClient webClient = webClientBuilder
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
-            .defaultHeader("Content-Type", "application/json")
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .baseUrl(botUrl)
             .build();
 
-        var proxy =
-            HttpServiceProxyFactory
-                .builderFor(WebClientAdapter.create(webClient))
-                .build();
+        var proxy = HttpServiceProxyFactory
+            .builderFor(WebClientAdapter.create(webClient))
+            .build();
         return proxy.createClient(BotClient.class);
     }
 }

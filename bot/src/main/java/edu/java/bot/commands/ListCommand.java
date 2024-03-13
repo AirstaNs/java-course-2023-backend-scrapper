@@ -4,8 +4,10 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
+import edu.java.bot.dto.OptionalAnswer;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,10 +32,23 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public SendMessage handle(Update update) {
-        ListLinksResponse response = botService.listLinks(update.message().chat().id()).answer();
-        if (response.links() == null || response.links().isEmpty()) {
-            return new SendMessage(update.message().chat().id(), textResolver.resolve("command.list.empty"));
+        Long chatId = update.message().chat().id();
+        OptionalAnswer<ListLinksResponse> optionalResponse = botService.listLinks(chatId);
+
+        if (optionalResponse.isError()) {
+            return new SendMessage(
+                chatId,
+                textResolver.resolve("command.list.error",
+                    Map.of("error_message", optionalResponse.apiErrorResponse().description())
+                )
+            );
         }
+
+        ListLinksResponse response = optionalResponse.answer();
+        if (response == null || response.links().isEmpty()) {
+            return new SendMessage(chatId, textResolver.resolve("command.list.empty"));
+        }
+
         StringBuilder message = new StringBuilder();
         message.append(textResolver.resolve("command.list.main"));
         int id = 1;
@@ -41,6 +56,6 @@ public class ListCommand extends AbstractCommand {
             message.append(id).append(". ").append(link.url()).append("\n");
             id++;
         }
-        return new SendMessage(update.message().chat().id(), message.toString()).disableWebPagePreview(true);
+        return new SendMessage(chatId, message.toString()).disableWebPagePreview(true);
     }
 }
