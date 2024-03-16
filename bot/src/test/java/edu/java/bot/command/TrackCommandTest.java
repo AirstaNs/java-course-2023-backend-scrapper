@@ -1,14 +1,18 @@
 package edu.java.bot.command;
 
 import edu.java.bot.Utils;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.model.response.LinkResponse;
+import edu.java.bot.dto.OptionalAnswer;
+import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.resolver.TextResolver;
 import edu.java.bot.service.BotService;
+import java.net.URI;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.Mockito;
+
 
 public class TrackCommandTest {
 
@@ -16,8 +20,9 @@ public class TrackCommandTest {
     public void handleShouldTrackLink() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.addLinkToUser(Mockito.anyString(), Mockito.anyLong()))
-               .thenReturn(new LinkResponse(true, null));
+               .thenReturn(OptionalAnswer.of(new LinkResponse(1L, URI.create("https://github.com/AirstaNs"))));
         TrackCommand command = new TrackCommand(createMockTextResolver(), mockBotService);
+
         Assertions.assertThat(command.handle(Utils.createMockUpdate("/track https://github.com/AirstaNs", 1L))
                                      .getParameters()
                                      .get("text")).isEqualTo("Link is tracked");
@@ -28,7 +33,7 @@ public class TrackCommandTest {
     public void handleShouldReturnErrorWhenServerError() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.addLinkToUser(Mockito.anyString(), Mockito.anyLong()))
-               .thenReturn(new LinkResponse(false, "null"));
+               .thenReturn(OptionalAnswer.error(ApiErrorResponse.builder().description("Error").build()));
         TrackCommand command = new TrackCommand(createMockTextResolver(), mockBotService);
         Assertions.assertThat(command.handle(Utils.createMockUpdate("/track https://github.com/AirstaNs", 1L))
                                      .getParameters()

@@ -1,7 +1,10 @@
 package edu.java.bot.model.response;
 
-import edu.java.bot.model.Link;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import java.util.List;
 
-public record ListLinksResponse(List<Link> links) {
+public record ListLinksResponse(
+    List<LinkResponse> links,
+    Integer size
+) {
 }

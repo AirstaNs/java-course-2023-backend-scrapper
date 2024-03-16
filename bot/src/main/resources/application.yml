@@ -3,7 +3,7 @@ app:
 
 spring:
   config:
-    import: classpath:/env.properties
+    import: optional:classpath:/env.properties
   application:
     name: bot
   jackson:
@@ -14,3 +14,7 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui

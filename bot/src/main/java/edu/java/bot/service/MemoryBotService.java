@@ -1,45 +1,47 @@
 package edu.java.bot.service;
 
-import edu.java.bot.model.Link;
-import edu.java.bot.model.response.LinkResponse;
-import edu.java.bot.model.response.ListLinksResponse;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
+import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
+import edu.java.bot.dto.OptionalAnswer;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class MemoryBotService implements BotService {
 
-    private final Map<Long, List<Link>> usersLinks = new ConcurrentHashMap<>();
+    private final Map<Long, List<LinkResponse>> usersLinks = new ConcurrentHashMap<>();
 
     @Override
-    public void registerUser(String name, Long id) {
+    public void registerUser(Long id) {
         usersLinks.put(id, new CopyOnWriteArrayList<>());
     }
 
     @Override
-    public LinkResponse addLinkToUser(String url, Long userId) {
-        usersLinks.computeIfAbsent(userId, k -> new CopyOnWriteArrayList<>())
-                  .add(new Link(url, UUID.randomUUID()));
-        return new LinkResponse(true);
+    public OptionalAnswer<LinkResponse> addLinkToUser(String url, Long userId) {
+        usersLinks.computeIfAbsent(userId, k ->
+            new CopyOnWriteArrayList<>()).add(new LinkResponse(1L, URI.create(url)));
+        return OptionalAnswer.of(new LinkResponse(1L, URI.create(url)));
     }
 
     @Override
-    public LinkResponse removeLinkFromUser(UUID linkId, Long userId) {
+    public OptionalAnswer<LinkResponse> removeLinkFromUser(Long linkId, Long userId) {
         usersLinks.computeIfAbsent(userId, k -> new CopyOnWriteArrayList<>())
-                  .removeIf(link -> link.uuid().equals(linkId));
-        return new LinkResponse(true);
+                  .removeIf(link -> link.id().equals(linkId));
+        return OptionalAnswer.of(new LinkResponse(1L, URI.create("https://github.com/AirstaNs")));
     }
 
     @Override
-    public ListLinksResponse listLinks(Long userId) {
+    public OptionalAnswer<ListLinksResponse> listLinks(Long userId) {
         if (usersLinks.isEmpty()) {
-            return new ListLinksResponse(List.of());
+            return OptionalAnswer.of(new ListLinksResponse(List.of(), 0));
         }
-        return new ListLinksResponse(Collections.unmodifiableList(usersLinks.get(userId)));
+        return OptionalAnswer.of(new ListLinksResponse(
+            Collections.unmodifiableList(usersLinks.get(userId)),
+            usersLinks.get(userId).size()
+        ));
     }
 }
