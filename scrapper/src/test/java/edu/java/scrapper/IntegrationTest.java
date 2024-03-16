@@ -1,6 +1,7 @@
 package edu.java.scrapper;
 
 import java.nio.file.Path;
+import java.sql.Connection;
 import liquibase.Liquibase;
 import liquibase.UpdateSummaryEnum;
 import liquibase.UpdateSummaryOutputEnum;
@@ -37,14 +38,16 @@ public abstract class IntegrationTest {
 
     @SneakyThrows
     private static void runMigrations(JdbcDatabaseContainer<?> container) {
-        Database database = DatabaseFactory.getInstance()
-                                           .findCorrectDatabaseImplementation(new JdbcConnection(container.createConnection("")));
-        Liquibase liquibase = new Liquibase(
-            "master.xml",
-            new DirectoryResourceAccessor(Path.of("migrations")),
-            database
-        );
-        updateCommand(liquibase).execute();
+        try (Connection connection = container.createConnection("")) {
+            var database = DatabaseFactory.getInstance()
+                                          .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            try (Liquibase liquibase = new Liquibase(
+                "master.xml",
+                new DirectoryResourceAccessor(Path.of("migrations")),
+                database)) {
+                updateCommand(liquibase).execute();
+            }
+        }
     }
 
     @SneakyThrows
